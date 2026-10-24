@@ -4,12 +4,12 @@
 
 ## 下载安装
 
-到 [Releases](https://github.com/liu1031143250-ui/pokebonk-clients/releases/latest) 下载：
+两个安装包就放在**仓库根目录**，点开就能下载（[Releases](https://github.com/liu1031143250-ui/pokebonk-clients/releases/latest) 里也有同一份）：
 
 | 平台 | 文件 | 大小 | 系统要求 | 说明 |
 |---|---|---|---|---|
-| 安卓 | `PokebonkClient-v1.0.apk` | 913 KB | Android 7.0+ (minSdk 24) | 已签名，直接安装 |
-| iOS | `PokebonkClient-iOS-unsigned.ipa` | 1.5 MB | iOS 15.0+，iPhone / iPad | **未签名**，需 AltStore / Sideloadly + 免费 Apple ID 侧载（7 天有效，到期重签） |
+| 安卓 | [`PokebonkClient-v1.0.apk`](PokebonkClient-v1.0.apk) | 913 KB | Android 7.0+ (minSdk 24) | 已签名，直接安装 |
+| iOS | [`PokebonkClient-iOS-unsigned.ipa`](PokebonkClient-iOS-unsigned.ipa) | 1.5 MB | iOS 15.0+，iPhone / iPad | **未签名**，需 AltStore / Sideloadly + 免费 Apple ID 侧载（7 天有效，到期重签） |
 
 **安卓安装**：APK 传到手机 → 点击 → 允许"未知来源"一次 → 桌面出现 PokéBonk 图标。
 
@@ -21,6 +21,8 @@
 
 ```
 pokebonk-clients/
+├── PokebonkClient-v1.0.apk       # 安卓安装包（913 KB，已签名）
+├── PokebonkClient-iOS-unsigned.ipa  # iOS 安装包（1.5 MB，未签名）
 ├── android/                  # 安卓客户端（Java + Gradle，零第三方依赖）
 │   ├── app/src/main/         #   全部源码与资源（MainActivity / 布局 / 图标 / 主题）
 │   ├── app/build.gradle      #   AGP 9.4.1，minSdk 24 / targetSdk 34，条件式签名
