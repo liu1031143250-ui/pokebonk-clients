@@ -1,0 +1,13 @@
+# Build artifacts
+build/
+.gradle/
+local.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Signing keystore (never commit; generate your own, see README)
+*.keystore
+*.jks

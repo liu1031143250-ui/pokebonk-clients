@@ -1,0 +1,19 @@
+# Common
+.idea/
+*.iml
+.DS_Store
+local.properties
+
+# Android
+android/build/
+android/.gradle/
+*.keystore
+*.jks
+
+# iOS
+ios/build/
+ios/*.xcarchive
+ios/Payload/
+ios/*.ipa
+xcuserdata/
+*.xcuserstate

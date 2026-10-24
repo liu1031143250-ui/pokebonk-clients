@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PokéBonk</string>
+    <string name="error_title">加载失败</string>
+    <string name="error_msg">网络好像不太稳，检查一下连接再重试吧</string>
+    <string name="error_retry">重新加载</string>
+</resources>

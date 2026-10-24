@@ -1,0 +1,79 @@
+name: Build iOS IPA (unsigned)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build unsigned app
+        run: |
+          APP_DIR="build/PokebonkClient.xcarchive/Products/Applications"
+          xcodebuild archive \
+            -project PokebonkClient.xcodeproj \
+            -scheme PokebonkClient \
+            -configuration Release \
+            -archivePath build/PokebonkClient.xcarchive \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            DEVELOPMENT_TEAM="" \
+            | tee build-archive.log || true
+          if [ ! -d "$APP_DIR/PokebonkClient.app" ]; then
+            echo "::warning::archive 未产出 .app，回退到 xcodebuild build"
+            xcodebuild build \
+              -project PokebonkClient.xcodeproj \
+              -scheme PokebonkClient \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath build/dd \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" \
+              | tee build-build.log
+            mkdir -p "$APP_DIR"
+            cp -R build/dd/Build/Products/Release-iphoneos/PokebonkClient.app "$APP_DIR/"
+          fi
+
+      - name: Verify .app
+        run: |
+          ls -lh build/PokebonkClient.xcarchive/Products/Applications/
+          plutil -p build/PokebonkClient.xcarchive/Products/Applications/PokebonkClient.app/Info.plist | head -20
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p Payload
+          cp -R build/PokebonkClient.xcarchive/Products/Applications/PokebonkClient.app Payload/
+          zip -qry PokebonkClient-unsigned.ipa Payload
+          ls -lh PokebonkClient-unsigned.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: PokebonkClient-unsigned-ipa
+          path: PokebonkClient-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build-archive.log
+            build-build.log

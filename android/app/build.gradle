@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.pokebonk.client'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.pokebonk.client'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            // 本地自签名证书，仅用于本机分发安装；重新打包时改这里即可。
+            // 仓库不包含 keystore：本地存在 pokebonk.keystore 时自动签名，
+            // 克隆的全新副本则产出未签名 release（自行生成签名证书后可签名，见 README）。
+            def keystoreFile = file('pokebonk.keystore')
+            if (keystoreFile.exists()) {
+                storeFile keystoreFile
+                storePassword 'pokebonk123'
+                keyAlias 'pokebonk'
+                keyPassword 'pokebonk123'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            if (signingConfigs.release.storeFile != null) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
